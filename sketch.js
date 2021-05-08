@@ -1,99 +1,226 @@
-const{Engine, World, Bodies, MouseConstraint, Mouse, Constraint, Composites} = Matter;
-var world, engine;
-let ground;
-let bird;
-var mouseConstraint;
-var box1, box2, box3, box4, box5, box6, box7, box8, box9, box10, box11, box12;
-var base1, base2;
-var sling;
-var topBoundary, leftBoundary, rightBoundary;
-var score = 0;
+const Engine = Matter.Engine;
+const World= Matter.World;
+const Bodies = Matter.Bodies;
+const Constraint = Matter.Constraint;
 
-function setup(){
-	
-    createCanvas(windowWidth,windowHeight);	
-    engine = Engine.create();
-    world = engine.world;
+var engine, world;
 
-    ground = new Ground(width/2, height-25, width, 50);
-    bird = new Bird(200, 300, 20);
+var b1,b2,b3,b4,b5,b6,b7,b17,b9,b10,b11,b12,b13,b14,b15,b16;
 
-    box1 = new boxClass(width-836, height-264, 60, 60);
-    box2 = new boxClass2(width-736, height-264, 60, 60);
-    box3 = new boxClass3(width-636, height-264, 60, 60);
-    box4 = new boxClass4(width-786, height-354, 60, 60);
-    box5 = new boxClass5(width-686, height-354, 60, 60);
-    box6 = new boxClass6(width-736, height-444, 60, 60);
+var b17, b18, b19, b20, b21, b22, b23, b24, b25;
 
-    box7 = new boxClass(width-836, height-464, 60, 60);
-    box8 = new boxClass2(width-736, height-464, 60, 60);
-    box9 = new boxClass3(width-636, height-464, 60, 60);
-    box10 = new boxClass4(width-786, height-554, 60, 60);
-    box11 = new boxClass5(width-686, height-554, 60, 60);
-    box12 = new boxClass6(width-736, height-644, 60, 60);
+var ground;
 
-    base1 = new Base(width-736, height-254, 300, 10);
-    base2 = new Base(width-736, height-454, 300, 10);
+var stand1, stand2;
 
-    leftBoundary = new Boundary(-50,350,50,900);
-    rightBoundary = new Boundary(width-6,350,50,900);
-    topBoundary = new Boundary(600,-50,1200,100);
+var polygon;
 
-    sling = new Slingshot(bird.body, {x:width-1236, y:height-454});
+var slingshot;
 
+var backgroundImage;
 
-    const mouse = Mouse.create(canvas.elt);
+var scoregame = 0;
 
-	var options = {
-		mouse: mouse
-	}
-	
-    mouseConstraint = MouseConstraint.create(engine, options);
-    World.add(world, mouseConstraint);
+function preload() {
+  getTime()
 }
 
-function draw(){
-    background(30,30,30);
-    Engine.update(engine);
 
-    textSize(20);
-    fill(255);
-    text("Score  " + score,500,50);
+function setup() {
+  createCanvas(1200,400);
 
-    ground.display();
-    bird.display();
-    box1.display();
-    box2.display();
-    box3.display();
-    box4.display();
-    box5.display();
-    box6.display();
-    box7.display();
-    box8.display();
-    box9.display();
-    box10.display();
-    box11.display();
-    box12.display();
-    base1.display();
-    base2.display();
-    leftBoundary.display();
-    rightBoundary.display();
-    topBoundary.display();
-    sling.display();
-    console.log(score);
+  engine = Engine.create();
+  world = engine.world;
+
+
+  b1 = new Box(600, 255, 30, 40);
+  b2 = new Box(570, 255, 30, 40);
+  b3 = new Box(540, 255, 30, 40);
+  b4 = new Box(510, 255, 30, 40);
+  b5 = new Box(630, 255, 30, 40);
+  b6 = new Box(660, 255, 30, 40);
+  b7 = new Box(690, 255, 30, 40);
+  b9 = new Box(600, 215, 30, 40);
+  b10 = new Box(570, 215, 30, 40);
+  b11 = new Box(540, 215, 30, 40);
+  b12 = new Box(630, 215, 30, 40);
+  b13 = new Box(660, 215, 30, 40);
+  b14 = new Box(600, 175, 30, 40);
+  b15 = new Box(570, 175, 30, 40);
+  b16 = new Box(630, 175, 30, 40);
+  b17 = new Box(600, 135, 30, 40);
+
+  /*b18 = new Box(1000,120,30,40);
+  b19 = new Box(1000,120,30,40);
+  b20 = new Box(1000,120,30,40);
+  b21 = new Box(1000,120,30,40);
+  b22 = new Box(1000,120,30,40);
+  b23 = new Box(990,120,30,40);
+  b24 = new Box(1000,120,30,40);*/
+
+  blocks1 = new Box(840, 175, 30, 40);
+  blocks2 = new Box(870, 175, 30, 40);
+  blocks3 = new Box(900, 175, 30, 40);
+  blocks4 = new Box(930, 175, 30, 40);
+  blocks5 = new Box(960, 175, 30, 40);
+
+  blocks6 = new Box(870, 135, 30, 40);
+  blocks7 = new Box(900, 135, 30, 40);
+  blocks8 = new Box(930, 135, 30, 40);
+
+  blocks9 = new Box(900, 95, 30, 40);
+
+
+
+  stand1 = new Ground(600, 280, 210, 10);
+  stand2 = new Ground(900, 200, 200, 10)
+  
+
+  polygon = new Polygon(200, 270, 23, 23);
+
+  slingshot = new SlingShot(polygon.body, {x:200, y:260});
+
+
+  
+  
 }
 
-function mouseReleased(){
-    setTimeout(() =>{
-        sling.fly();
-    },15);
-    
+function draw() {
+  if(backgroundImage) 
+  background(backgroundImage);
+
+  textSize(35);
+  //fill(100,168,21);
+  text("Score:"+ scoregame,width-300,50)
+
+console.log(scoregame)
+
+  Engine.update(engine);  
+
+ // console.log(polygon.body.position);
+
+  fill("blue")
+  textSize(20)
+  text("Drag the Hexagonal and realease it towards the Blocks ",200,40)
+
+  drawSprites();
+
+  
+
+  polygon.display();
+
+  slingshot.display();
+
+  stand1.display();
+
+  b1.display();
+  b2.display();
+  b3.display();
+  b4.display();
+  b5.display();
+  b6.display();
+  b7.display();
+
+  b1.score();
+  b2.score();
+  b3.score();
+  b4.score();
+  b5.score();
+  b6.score();
+  b7.score();
+
+  
+  b9.display();
+  b10.display();
+  b11.display();
+  b12.display();
+  b13.display();
+  b14.display();
+  b15.display();
+  b16.display();
+  b17.display();
+
+  b9.score();
+  b10.score();
+  b11.score();
+  b12.score();
+  b13.score();
+  b14.score();
+  b15.score();
+  b16.score();
+  b17.score();
+  
+
+
+
+
+  blocks1.display()
+  blocks2.display();
+  blocks3.display()
+  blocks4.display();
+  blocks5.display();
+  blocks6.display();
+  blocks7.display();
+  blocks8.display();
+  blocks9.display();
+
+  blocks1.score();
+  blocks2.score();
+  blocks3.score();
+  blocks4.score();
+  blocks5.score();
+  blocks6.score();
+  blocks7.score();
+  blocks8.score();
+  blocks9.score();
+
+  
+
+  stand2.display();
+
+
+
 }
 
-function keyPressed(){
-    if(keyCode === 32){
-        World.remove(world, bird.body);
-        bird = new Bird(200, 300, 20);
-        sling.attach(bird.body);
+
+
+function mouseDragged(){
+  Matter.Body.setPosition(polygon.body, {x:mouseX, y:mouseY})
+  
+  
+  }
+  
+  
+  function mouseReleased(){
+  slingshot.fly();
+  
+  }
+
+  function keyPressed() {
+    if (keyCode === 32) {
+      slingshot.attach(polygon.body);
     }
-}
+  }
+
+  async function getTime() {
+  
+    var getinfo= await   fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata")
+    var infotype = await getinfo.json();
+    console.log(infotype)
+      
+    var time = infotype.datetime;
+    console.log(time);
+
+    var hr = time.slice(11,13);
+    console.log(hr);
+
+    if(hr >= 6 && hr <=18) {
+        bg = "sky for game.jpg";
+    } else {
+        bg = "nightsky...jpg";
+
+    }
+
+    backgroundImage = loadImage(bg);
+    console.log(backgroundImage)
+  }
